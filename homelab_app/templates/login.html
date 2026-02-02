@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Login</h1>
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+  <form method="post" action="/login" class="card">
+    <label>Username</label>
+    <input name="username" autocomplete="username" required />
+    <label>Password</label>
+    <input name="password" type="password" autocomplete="current-password" required />
+    <button class="btn" type="submit">Login</button>
+  </form>
+  <p class="hint">Create a user via CLI: <code>python -m homelab_app.cli create-user --username admin --password admin123</code></p>
+{% endblock %}

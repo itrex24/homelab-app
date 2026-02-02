@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>{% if task %}Edit task{% else %}New task{% endif %}</h1>
+  <form method="post" action="/tasks/save" class="card">
+    <input type="hidden" name="task_id" value="{{ task.id if task else '' }}" />
+    <label>Title</label>
+    <input name="title" value="{{ task.title if task else '' }}" required />
+    <label>Description</label>
+    <textarea name="description" rows="6">{{ task.description if task else '' }}</textarea>
+
+    <label>Status</label>
+    <select name="status_value">
+      {% for s in statuses %}
+        {% set selected = (task and task.status.value == s.value) or ((not task) and s.value == "todo") %}
+        <option value="{{ s.value }}" {% if selected %}selected{% endif %}>{{ s.value }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Due date (YYYY-MM-DD)</label>
+    <input name="due_date" value="{{ task.due_date if task and task.due_date else '' }}" />
+
+    <label>Tags (comma-separated)</label>
+    <input name="tags" value="{{ tags_csv }}" />
+
+    <div class="row">
+      <button class="btn" type="submit">Save</button>
+      <a class="btn btn-secondary" href="/">Cancel</a>
+    </div>
+  </form>
+
+  {% if task %}
+    <form method="post" action="/tasks/{{ task.id }}/delete" class="mt">
+      <button class="btn btn-danger" type="submit">Delete task</button>
+    </form>
+  {% endif %}
+{% endblock %}

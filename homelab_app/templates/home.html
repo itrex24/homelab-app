@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Dashboard</h1>
+
+  <div class="grid">
+    <section class="card">
+      <div class="row">
+        <h2>Notes</h2>
+        <a class="btn" href="/notes/new">New note</a>
+      </div>
+      {% if notes|length == 0 %}
+        <p class="hint">No notes yet.</p>
+      {% else %}
+        <ul class="list">
+          {% for n in notes %}
+            <li>
+              <a href="/notes/{{ n.id }}">{{ n.title }}</a>
+              <span class="muted">({{ n.updated_at.strftime("%Y-%m-%d") }})</span>
+              {% if n.tags|length > 0 %}
+                <span class="tags">
+                  {% for t in n.tags %}<span class="tag">{{ t.name }}</span>{% endfor %}
+                </span>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </section>
+
+    <section class="card">
+      <div class="row">
+        <h2>Tasks</h2>
+        <a class="btn" href="/tasks/new">New task</a>
+      </div>
+      {% if tasks|length == 0 %}
+        <p class="hint">No tasks yet.</p>
+      {% else %}
+        <ul class="list">
+          {% for t in tasks %}
+            <li>
+              <a href="/tasks/{{ t.id }}">{{ t.title }}</a>
+              <span class="pill">{{ t.status.value }}</span>
+              {% if t.due_date %}<span class="muted">due {{ t.due_date }}</span>{% endif %}
+              <form method="post" action="/tasks/{{ t.id }}/archive" class="inline">
+                <button class="btn btn-secondary" type="submit">Archive</button>
+              </form>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </section>
+  </div>
+{% endblock %}

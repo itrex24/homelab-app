@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>{% if note %}Edit note{% else %}New note{% endif %}</h1>
+  <form method="post" action="/notes/save" class="card">
+    <input type="hidden" name="note_id" value="{{ note.id if note else '' }}" />
+    <label>Title</label>
+    <input name="title" value="{{ note.title if note else '' }}" required />
+    <label>Body</label>
+    <textarea name="body" rows="10">{{ note.body if note else '' }}</textarea>
+    <label>Tags (comma-separated)</label>
+    <input name="tags" value="{{ tags_csv }}" />
+    <div class="row">
+      <button class="btn" type="submit">Save</button>
+      <a class="btn btn-secondary" href="/">Cancel</a>
+    </div>
+  </form>
+
+  {% if note %}
+    <form method="post" action="/notes/{{ note.id }}/delete" class="mt">
+      <button class="btn btn-danger" type="submit">Delete note</button>
+    </form>
+  {% endif %}
+{% endblock %}
